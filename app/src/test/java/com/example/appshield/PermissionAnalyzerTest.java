@@ -90,4 +90,33 @@ public class PermissionAnalyzerTest {
         assertEquals(1, categories.size());
         assertTrue(categories.contains(RiskConstants.CAMERA));
     }
+
+    @Test
+    public void allSensitivePermissions_returnAllCategories() {
+
+        List<String> permissions = Arrays.asList(
+                "android.permission.CAMERA",
+                "android.permission.READ_MEDIA_IMAGES",
+                "android.permission.POST_NOTIFICATIONS",
+                "android.permission.ACCESS_FINE_LOCATION",
+                "android.permission.READ_CONTACTS",
+                "android.permission.RECORD_AUDIO",
+                "android.permission.READ_SMS",
+                "android.permission.READ_PHONE_STATE"
+        );
+
+        List<String> categories =
+                analyzer.getSensitiveCategories(permissions);
+
+        assertEquals(8, categories.size());
+
+        assertTrue(categories.contains(RiskConstants.CAMERA));
+        assertTrue(categories.contains(RiskConstants.STORAGE_MEDIA));
+        assertTrue(categories.contains(RiskConstants.NOTIFICATIONS));
+        assertTrue(categories.contains(RiskConstants.LOCATION));
+        assertTrue(categories.contains(RiskConstants.CONTACTS));
+        assertTrue(categories.contains(RiskConstants.MICROPHONE));
+        assertTrue(categories.contains(RiskConstants.SMS));
+        assertTrue(categories.contains(RiskConstants.PHONE));
+    }
 }
