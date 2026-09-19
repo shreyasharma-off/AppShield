@@ -129,17 +129,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         );
 
         if (cursor != null) {
-            while (cursor.moveToNext()) {
-                long   id      = cursor.getLong  (cursor.getColumnIndexOrThrow(COL_ID));
-                String date    = cursor.getString(cursor.getColumnIndexOrThrow(COL_SCAN_DATE));
-                int    total   = cursor.getInt   (cursor.getColumnIndexOrThrow(COL_TOTAL_APPS));
-                int    high    = cursor.getInt   (cursor.getColumnIndexOrThrow(COL_HIGH_RISK_COUNT));
-                int    medium  = cursor.getInt   (cursor.getColumnIndexOrThrow(COL_MEDIUM_RISK_COUNT));
-                int    low     = cursor.getInt   (cursor.getColumnIndexOrThrow(COL_LOW_RISK_COUNT));
+            try {
+                while (cursor.moveToNext()) {
+                    long   id      = cursor.getLong  (cursor.getColumnIndexOrThrow(COL_ID));
+                    String date    = cursor.getString(cursor.getColumnIndexOrThrow(COL_SCAN_DATE));
+                    int    total   = cursor.getInt   (cursor.getColumnIndexOrThrow(COL_TOTAL_APPS));
+                    int    high    = cursor.getInt   (cursor.getColumnIndexOrThrow(COL_HIGH_RISK_COUNT));
+                    int    medium  = cursor.getInt   (cursor.getColumnIndexOrThrow(COL_MEDIUM_RISK_COUNT));
+                    int    low     = cursor.getInt   (cursor.getColumnIndexOrThrow(COL_LOW_RISK_COUNT));
 
-                scans.add(new ScanRecord(id, date, total, high, medium, low));
+                    scans.add(new ScanRecord(id, date, total, high, medium, low));
+                }
+            } finally {
+                cursor.close(); // guaranteed to close even if a RuntimeException is thrown
             }
-            cursor.close(); // always close to avoid resource leaks
         }
 
         db.close();
