@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    item_scan_record.xml
+    One row in the Scan History RecyclerView.
+    Shows: date (bold), total apps, and High / Medium / Low counts in a horizontal row.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="12dp"
+    android:background="?attr/selectableItemBackground">
+
+    <!-- Date of the scan — shown in bold -->
+    <TextView
+        android:id="@+id/tvScanDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textSize="15sp"
+        android:textColor="?attr/colorOnSurface"
+        android:text="19 Sep 2026, 05:30 PM" />
+
+    <!-- Total apps scanned -->
+    <TextView
+        android:id="@+id/tvTotalApps"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:textSize="13sp"
+        android:textColor="?attr/colorOnSurfaceVariant"
+        android:text="Total apps: 42" />
+
+    <!-- Horizontal row: High / Medium / Low counts -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="6dp">
+
+        <!-- High risk count — red -->
+        <TextView
+            android:id="@+id/tvHighCount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="13sp"
+            android:textColor="#D32F2F"
+            android:text="High: 5" />
+
+        <!-- Medium risk count — orange -->
+        <TextView
+            android:id="@+id/tvMediumCount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="13sp"
+            android:textColor="#F57C00"
+            android:text="Medium: 12" />
+
+        <!-- Low risk count — green -->
+        <TextView
+            android:id="@+id/tvLowCount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="13sp"
+            android:textColor="#388E3C"
+            android:text="Low: 25" />
+
+    </LinearLayout>
+
+    <!-- Divider line between rows -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="10dp"
+        android:background="?attr/colorOutlineVariant" />
+
+</LinearLayout>

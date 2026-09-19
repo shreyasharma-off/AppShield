@@ -1,3 +1,30 @@
 <resources>
     <string name="app_name">AppShield</string>
-</resources>
+    <!-- ── Scan History strings (Prem) ─────────────────────────────────────── -->
+    <string name="history_title">Scan History</string>
+    <string name="history_empty">No scans yet. Run a scan from the Dashboard.</string>
+    <string name="history_clear_button">Clear History</string>
+    <string name="history_toast_nothing_to_clear">No history to clear</string>
+    <string name="history_toast_cleared">History cleared</string>
+    <string name="history_dialog_title">Clear History</string>
+    <string name="history_dialog_message">This will delete all saved scan summaries. Continue?</string>
+    <string name="history_dialog_clear">Clear</string>
+    <string name="history_dialog_cancel">Cancel</string>
+
+    <!-- ── About / Settings strings (Prem) ──────────────────────────────────── -->
+    <string name="about_app_name">AppShield</string>
+    <string name="about_tagline">Android Security &amp; Privacy Risk Analyzer</string>
+    <string name="about_section_about">About AppShield</string>
+    <string name="about_body">AppShield scans the apps installed on your device and calculates a risk
+score based on the sensitive permissions each app requests. It helps you
+understand which apps have access to personal data like your camera,
+microphone, contacts, location, and SMS.</string>
+    <string name="about_section_disclaimer">Disclaimer</string>
+    <string name="about_disclaimer">AppShield is not an antivirus or malware detector. The risk score is
+a project-defined heuristic, not an official Android security score.
+A permission request does not mean an app is malicious. AppShield
+cannot tell how permissions are actually used by an app.</string>
+    <string name="about_section_project">Project Information</string>
+    <string name="about_project_info">College Mobile Application Development Mini-Project\n\nTeam:\n• Shreya\n• Ankit\n• Prem\n\nTechnology Stack: Android / Java / XML / SQLite</string>
+    <string name="about_btn_methodology">View Risk Methodology</string>
+</resources>
