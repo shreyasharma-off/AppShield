@@ -2,4 +2,53 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- AppShield Prototype Colors -->
+    <color name="navy_primary">#0C1B33</color>
+    <color name="navy_dark">#07111F</color>
+    <color name="bg_light">#F5F7FA</color>
+    
+    <color name="risk_high">#FF4D4D</color>
+    <color name="risk_medium">#FFA500</color>
+    <color name="risk_low">#4CAF50</color>
+
+    <color name="text_primary">#0C1B33</color>
+    <color name="text_secondary">#64748B</color>
+    <color name="border_light">#E2E8F0</color>
+
+    <color name="high_bg">#FFF1F2</color>
+    <color name="medium_bg">#FFFBEB</color>
+    <color name="low_bg">#F0FDF4</color>
+
+    <!-- UI Component Colors -->
+    <color name="ink">#0C1B33</color>
+    <color name="muted">#64748B</color>
+    <color name="search_icon">#94A3B8</color>
+    <color name="surface">#FFFFFF</color>
+    <color name="nav_inactive">#94A3B8</color>
+
+    <!-- Additional required colors for themes.xml -->
+    <color name="navy_2">#1E293B</color>
+    <color name="splash_subtitle">#94A3B8</color>
+    <color name="splash_caption">#64748B</color>
+    <color name="splash_footer">#475569</color>
+    <color name="hero_subtitle">#CBD5E1</color>
+    <color name="eyebrow_light">#94A3B8</color>
+    <color name="risk_medium_accent">#F59E0B</color>
+    <color name="risk_low_accent">#10B981</color>
+    <color name="line">#E2E8F0</color>
+    <color name="info_text">#475569</color>
+    <color name="white_12">#1AFFFFFF</color>
+    <color name="white_20">#33FFFFFF</color>
+    <color name="scan_progress">#6EC7FF</color>
+    <color name="scan_muted">#AFC0D6</color>
+    <color name="scan_stage">#E2F2FF</color>
+    <color name="scan_pending">#8FA3BA</color>
+
+    <!-- Additional colors referenced by the existing dashboard/activity layouts -->
+    <color name="row_icon_bg">#EEF4FF</color>
+    <color name="disclaimer_bg">#F8FAFC</color>
+    <color name="disclaimer_border">#E2E8F0</color>
+    <color name="info_bg">#F8FAFC</color>
+    <color name="permission_chip_bg">#EFF6FF</color>
 </resources>

@@ -1,9 +1,28 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
     <style name="Base.Theme.AppShield" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">@color/navy_primary</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSecondary">@color/navy_2</item>
+        <item name="android:statusBarColor">@color/navy_primary</item>
+        <item name="android:navigationBarColor">@color/surface</item>
+        <item name="android:windowBackground">@color/bg_light</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="colorSurface">@color/surface</item>
+        <item name="android:textColorPrimary">@color/text_primary</item>
+        <item name="android:textColorSecondary">@color/text_secondary</item>
     </style>
 
     <style name="Theme.AppShield" parent="Base.Theme.AppShield" />
+
+    <style name="Theme.AppShield.Splash" parent="Theme.AppShield">
+        <item name="android:windowBackground">@color/navy_primary</item>
+        <item name="android:navigationBarColor">@color/navy_primary</item>
+        <item name="android:statusBarColor">@color/navy_primary</item>
+    </style>
+
+    <style name="Theme.AppShield.Scan" parent="Theme.AppShield">
+        <item name="android:windowBackground">@color/navy_primary</item>
+        <item name="android:navigationBarColor">@color/navy_primary</item>
+        <item name="android:statusBarColor">@color/navy_primary</item>
+    </style>
 </resources>
