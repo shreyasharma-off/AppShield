@@ -18,6 +18,10 @@ public class AppInfo {
     private String riskLevel;
     private List<String> riskReasons;
 
+    // Privacy exposure based on currently granted sensitive permissions
+    private int privacyExposureScore;
+    private String privacyExposureLevel;
+
     public AppInfo(
             String appName,
             String packageName,
@@ -27,7 +31,9 @@ public class AppInfo {
             List<String> sensitiveCategories,
             int riskScore,
             String riskLevel,
-            List<String> riskReasons
+            List<String> riskReasons,
+            int privacyExposureScore,
+            String privacyExposureLevel
     ) {
         this.appName = appName;
         this.packageName = packageName;
@@ -38,6 +44,8 @@ public class AppInfo {
         this.riskScore = riskScore;
         this.riskLevel = riskLevel;
         this.riskReasons = riskReasons;
+        this.privacyExposureScore = privacyExposureScore;
+        this.privacyExposureLevel = privacyExposureLevel;
     }
 
     public String getAppName() {
@@ -74,5 +82,13 @@ public class AppInfo {
 
     public List<String> getRiskReasons() {
         return riskReasons;
+    }
+
+    public int getPrivacyExposureScore() {
+        return privacyExposureScore;
+    }
+
+    public String getPrivacyExposureLevel() {
+        return privacyExposureLevel;
     }
 }

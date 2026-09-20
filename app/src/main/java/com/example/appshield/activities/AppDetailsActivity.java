@@ -118,25 +118,43 @@ public class AppDetailsActivity extends AppCompatActivity {
             riskColor = getResources().getColor(R.color.risk_high);
             riskBg = getResources().getColor(R.color.high_bg);
 
-            txtRiskDesc.setText(
-                    "This application requests multiple highly sensitive permissions that could impact your privacy."
-            );
-
         } else if ("Medium".equalsIgnoreCase(appInfo.getRiskLevel())) {
 
             riskColor = getResources().getColor(R.color.risk_medium);
             riskBg = getResources().getColor(R.color.medium_bg);
+        }
 
-            txtRiskDesc.setText(
-                    "This application requests some sensitive permissions. Review the reasons below."
-            );
+// Build security risk description.
+        String securityDescription;
+
+        if ("High".equalsIgnoreCase(appInfo.getRiskLevel())) {
+
+            securityDescription =
+                    "This application requests multiple highly sensitive permissions that could impact your privacy.";
+
+        } else if ("Medium".equalsIgnoreCase(appInfo.getRiskLevel())) {
+
+            securityDescription =
+                    "This application requests some sensitive permissions. Review the reasons below.";
 
         } else {
 
-            txtRiskDesc.setText(
-                    "This application requests minimal sensitive permissions and is considered low risk."
-            );
+            securityDescription =
+                    "This application requests minimal sensitive permissions and is considered low risk.";
         }
+
+// Add Privacy Exposure information.
+        String privacyExposureText =
+                "\n\nPrivacy Exposure: "
+                        + appInfo.getPrivacyExposureLevel().toUpperCase()
+                        + " ("
+                        + appInfo.getPrivacyExposureScore()
+                        + " points)"
+                        + "\nBased on currently granted sensitive permissions.";
+
+        txtRiskDesc.setText(
+                securityDescription + privacyExposureText
+        );
 
         txtRiskLevel.setTextColor(riskColor);
         cardResult.setCardBackgroundColor(riskBg);
