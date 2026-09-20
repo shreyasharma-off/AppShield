@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="navy_primary">#162C48</color>
+    <color name="navy_dark">#07111F</color>
+    <color name="ink">#EDF3FA</color>
+    <color name="muted">#91A0B3</color>
+    <color name="line">#223349</color>
+    <color name="surface">#101E30</color>
+    <color name="bg_light">#081321</color>
+    <color name="text_primary">#EDF3FA</color>
+    <color name="text_secondary">#91A0B3</color>
+    <color name="border_light">#223349</color>
+    <color name="row_icon_bg">#1A2B3F</color>
+    <color name="row_icon_tint">#A6B8CE</color>
+    <color name="info_bg">#13263A</color>
+    <color name="info_text">#9EB1C5</color>
+    <color name="nav_inactive">#93A0B0</color>
+    <color name="permission_chip_bg">#192D42</color>
+    <color name="permission_chip_text">#AFC2D8</color>
+    <color name="disclaimer_bg">#302719</color>
+    <color name="disclaimer_border">#4E4127</color>
+    <color name="disclaimer_text">#C4AD80</color>
+    <color name="disclaimer_title">#DEC18B</color>
+    <color name="risk_high">#EC7278</color>
+    <color name="risk_medium">#E3A447</color>
+    <color name="risk_low">#58BD8E</color>
+    <color name="high_bg">#3B2028</color>
+    <color name="medium_bg">#3A2A16</color>
+    <color name="low_bg">#15382E</color>
+    <color name="risk_result_high_bg">#281A23</color>
+    <color name="risk_result_high_border">#5D3038</color>
+    <color name="risk_result_desc">#C49BA3</color>
+</resources>
