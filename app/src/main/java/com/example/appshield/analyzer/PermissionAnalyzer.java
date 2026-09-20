@@ -64,4 +64,10 @@ public class PermissionAnalyzer {
             categories.add(category);
         }
     }
+
+    public List<String> getGrantedSensitiveCategories(
+            List<String> grantedPermissions
+    ) {
+        return getSensitiveCategories(grantedPermissions);
+    }
 }
