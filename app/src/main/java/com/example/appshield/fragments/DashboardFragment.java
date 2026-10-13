@@ -18,11 +18,14 @@ import com.example.appshield.activities.ScanActivity;
 import com.example.appshield.database.DatabaseHelper;
 import com.example.appshield.models.ScanRecord;
 import java.util.List;
+import android.content.SharedPreferences;
 
 public class DashboardFragment extends Fragment {
 
     private TextView txtTotalApps, txtHighRisk, txtMediumRisk, txtLowRisk;
     private DatabaseHelper dbHelper;
+    private static final String PREFS_NAME = "appshield_session";
+    private static final String KEY_SCAN_COMPLETED = "scan_completed";
 
     @Nullable
     @Override
@@ -75,10 +78,29 @@ public class DashboardFragment extends Fragment {
         rowSettings.setOnClickListener(v -> ((MainActivity) requireActivity()).setSelectedNavItem(R.id.nav_settings));
     }
 
+
+
     private void updateOverview() {
+        boolean scanCompleted = requireContext()
+                .getSharedPreferences(
+                        "appshield_session",
+                        android.content.Context.MODE_PRIVATE
+                )
+                .getBoolean("scan_completed", false);
+
+        if (!scanCompleted) {
+            txtTotalApps.setText("0");
+            txtHighRisk.setText("0");
+            txtMediumRisk.setText("0");
+            txtLowRisk.setText("0");
+            return;
+        }
+
         List<ScanRecord> scans = dbHelper.getAllScans();
-        if (!scans.isEmpty()) {
+
+        if (scans != null && !scans.isEmpty()) {
             ScanRecord latest = scans.get(0);
+
             txtTotalApps.setText(String.valueOf(latest.getTotalApps()));
             txtHighRisk.setText(String.valueOf(latest.getHighRiskCount()));
             txtMediumRisk.setText(String.valueOf(latest.getMediumRiskCount()));
@@ -90,6 +112,8 @@ public class DashboardFragment extends Fragment {
             txtLowRisk.setText("0");
         }
     }
+
+
 
     @Override
     public void onResume() {

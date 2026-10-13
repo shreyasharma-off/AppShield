@@ -78,9 +78,17 @@ public class ScanActivity extends AppCompatActivity {
                 else low++;
             }
 
+
             // Save to database
             DatabaseHelper dbHelper = new DatabaseHelper(this);
             dbHelper.insertScan(new ScanRecord(scannedApps.size(), high, medium, low));
+
+            // Mark that a scan has completed successfully
+            getSharedPreferences("appshield_session", MODE_PRIVATE)
+                    .edit()
+                    .putBoolean("scan_completed", true)
+                    .apply();
+
 
             int finalHigh = high;
             int finalMedium = medium;
