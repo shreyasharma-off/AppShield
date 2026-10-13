@@ -22,6 +22,10 @@ public class AppInfo {
     private int privacyExposureScore;
     private String privacyExposureLevel;
 
+    // Security posture information
+    private int targetSdkVersion;
+    private boolean debuggable;
+
     public AppInfo(
             String appName,
             String packageName,
@@ -33,7 +37,9 @@ public class AppInfo {
             String riskLevel,
             List<String> riskReasons,
             int privacyExposureScore,
-            String privacyExposureLevel
+            String privacyExposureLevel,
+            int targetSdkVersion,
+            boolean debuggable
     ) {
         this.appName = appName;
         this.packageName = packageName;
@@ -46,6 +52,8 @@ public class AppInfo {
         this.riskReasons = riskReasons;
         this.privacyExposureScore = privacyExposureScore;
         this.privacyExposureLevel = privacyExposureLevel;
+        this.targetSdkVersion = targetSdkVersion;
+        this.debuggable = debuggable;
     }
 
     public String getAppName() {
@@ -90,5 +98,13 @@ public class AppInfo {
 
     public String getPrivacyExposureLevel() {
         return privacyExposureLevel;
+    }
+
+    public int getTargetSdkVersion() {
+        return targetSdkVersion;
+    }
+
+    public boolean isDebuggable() {
+        return debuggable;
     }
 }

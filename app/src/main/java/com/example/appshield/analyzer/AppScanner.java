@@ -141,6 +141,14 @@ public class AppScanner {
                                 privacyExposureScore
                         );
 
+                // Security posture signals.
+                int targetSdkVersion =
+                        applicationInfo.targetSdkVersion;
+
+                boolean debuggable =
+                        (applicationInfo.flags
+                                & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
+
                 // Map requested permissions to AppShield's sensitive categories.
                 List<String> sensitiveCategories =
                         permissionAnalyzer.getSensitiveCategories(
@@ -172,7 +180,9 @@ public class AppScanner {
                         riskLevel,
                         riskReasons,
                         privacyExposureScore,
-                        privacyExposureLevel
+                        privacyExposureLevel,
+                        targetSdkVersion,
+                        debuggable
                 );
 
                 scannedApps.add(appInfo);
