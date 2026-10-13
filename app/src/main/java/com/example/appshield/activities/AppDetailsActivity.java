@@ -8,22 +8,22 @@ import android.provider.Settings;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.appshield.R;
+import com.example.appshield.analyzer.PermissionAnalyzer;
 import com.example.appshield.models.AppInfo;
+import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.material.card.MaterialCardView;
 
 import java.util.List;
-import com.example.appshield.analyzer.PermissionAnalyzer;
 
 public class AppDetailsActivity extends AppCompatActivity {
 
-    public static AppInfo selectedApp; // Bridge to avoid serialization issues with Drawable
+    public static AppInfo selectedApp;
     private AppInfo appInfo;
 
     @Override
@@ -31,12 +31,13 @@ public class AppDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_app_details);
 
-        // Prefer the static bridge for this college project to preserve Drawable
+        // Retrieve the selected app.
+        // The static reference preserves the Drawable app icon.
         if (selectedApp != null) {
             appInfo = selectedApp;
         } else {
-            // Fallback for intent if possible
-            appInfo = (AppInfo) getIntent().getSerializableExtra("app_info");
+            appInfo = (AppInfo) getIntent()
+                    .getSerializableExtra("app_info");
         }
 
         if (appInfo == null) {
@@ -55,15 +56,29 @@ public class AppDetailsActivity extends AppCompatActivity {
 
     private void setupUI() {
 
-        ImageView imgIcon = findViewById(R.id.img_details_icon);
-        TextView txtAppName = findViewById(R.id.txt_details_app_name);
-        TextView txtPackage = findViewById(R.id.txt_details_package);
+        // ---------------------------------------------------------
+        // View references
+        // ---------------------------------------------------------
 
-        TextView txtRiskLevel = findViewById(R.id.txt_details_risk_level);
-        TextView txtRiskScore = findViewById(R.id.txt_details_risk_score);
-        TextView txtRiskDesc = findViewById(R.id.txt_details_risk_desc);
+        ImageView imgIcon =
+                findViewById(R.id.img_details_icon);
 
-        LinearLayout layoutCategories =
+        TextView txtAppName =
+                findViewById(R.id.txt_details_app_name);
+
+        TextView txtPackage =
+                findViewById(R.id.txt_details_package);
+
+        TextView txtRiskLevel =
+                findViewById(R.id.txt_details_risk_level);
+
+        TextView txtRiskScore =
+                findViewById(R.id.txt_details_risk_score);
+
+        TextView txtRiskDesc =
+                findViewById(R.id.txt_details_risk_desc);
+
+        FlexboxLayout sensitiveCategoriesLayout =
                 findViewById(R.id.layout_sensitive_categories);
 
         TextView txtReasons =
@@ -71,6 +86,9 @@ public class AppDetailsActivity extends AppCompatActivity {
 
         TextView txtPermissions =
                 findViewById(R.id.txt_details_permissions);
+
+        Button btnTogglePermissions =
+                findViewById(R.id.btn_toggle_permissions);
 
         MaterialCardView cardResult =
                 findViewById(R.id.card_risk_result);
@@ -80,6 +98,24 @@ public class AppDetailsActivity extends AppCompatActivity {
 
         ImageView btnBack =
                 findViewById(R.id.btn_back);
+
+        // Separate Privacy Exposure card.
+        TextView txtPrivacyLevel =
+                findViewById(R.id.txt_privacy_exposure_level);
+
+        TextView txtPrivacyScore =
+                findViewById(R.id.txt_privacy_exposure_score);
+
+        // Separate Security Posture card.
+        TextView txtTargetSdk =
+                findViewById(R.id.txt_target_sdk);
+
+        TextView txtDebuggable =
+                findViewById(R.id.txt_debuggable);
+
+        // ---------------------------------------------------------
+        // Navigation
+        // ---------------------------------------------------------
 
         btnBack.setOnClickListener(v -> finish());
 
@@ -99,77 +135,110 @@ public class AppDetailsActivity extends AppCompatActivity {
         txtPackage.setText(appInfo.getPackageName());
 
         // ---------------------------------------------------------
-        // Risk Result
+        // Security Risk
+        // Based on the requested sensitive permissions.
         // ---------------------------------------------------------
 
+        String riskLevel = appInfo.getRiskLevel();
+
         txtRiskLevel.setText(
-                appInfo.getRiskLevel().toUpperCase() + " RISK"
+                riskLevel.toUpperCase() + " RISK"
         );
 
         txtRiskScore.setText(
                 appInfo.getRiskScore() + " points"
         );
 
-        int riskColor = getResources().getColor(R.color.risk_low);
-        int riskBg = getResources().getColor(R.color.low_bg);
+        int riskColor =
+                getResources().getColor(R.color.risk_low);
 
-        if ("High".equalsIgnoreCase(appInfo.getRiskLevel())) {
+        int riskBackground =
+                getResources().getColor(R.color.low_bg);
 
-            riskColor = getResources().getColor(R.color.risk_high);
-            riskBg = getResources().getColor(R.color.high_bg);
+        if ("High".equalsIgnoreCase(riskLevel)) {
 
-        } else if ("Medium".equalsIgnoreCase(appInfo.getRiskLevel())) {
+            riskColor =
+                    getResources().getColor(R.color.risk_high);
 
-            riskColor = getResources().getColor(R.color.risk_medium);
-            riskBg = getResources().getColor(R.color.medium_bg);
+            riskBackground =
+                    getResources().getColor(R.color.high_bg);
+
+        } else if ("Medium".equalsIgnoreCase(riskLevel)) {
+
+            riskColor =
+                    getResources().getColor(R.color.risk_medium);
+
+            riskBackground =
+                    getResources().getColor(R.color.medium_bg);
         }
 
-// Build security risk description.
+        txtRiskLevel.setTextColor(riskColor);
+        cardResult.setCardBackgroundColor(riskBackground);
+
         String securityDescription;
 
-        if ("High".equalsIgnoreCase(appInfo.getRiskLevel())) {
+        if ("High".equalsIgnoreCase(riskLevel)) {
 
             securityDescription =
-                    "This application requests multiple highly sensitive permissions that could impact your privacy.";
+                    "This application requests multiple highly " +
+                            "sensitive permissions that could impact your privacy.";
 
-        } else if ("Medium".equalsIgnoreCase(appInfo.getRiskLevel())) {
+        } else if ("Medium".equalsIgnoreCase(riskLevel)) {
 
             securityDescription =
-                    "This application requests some sensitive permissions. Review the reasons below.";
+                    "This application requests some sensitive " +
+                            "permissions. Review the reasons below.";
 
         } else {
 
             securityDescription =
-                    "This application requests minimal sensitive permissions and is considered low risk.";
+                    "This application requests minimal sensitive " +
+                            "permissions and is considered low risk.";
         }
 
-// Add Privacy Exposure information.
-        String privacyExposureText =
-                "\n\nPrivacy Exposure: "
-                        + appInfo.getPrivacyExposureLevel().toUpperCase()
-                        + " ("
-                        + appInfo.getPrivacyExposureScore()
-                        + " points)"
-                        + "\nBased on currently granted sensitive permissions.";
+        // Only show the security risk description here.
+        // Privacy Exposure and Security Posture have separate cards.
+        txtRiskDesc.setText(securityDescription);
 
-        txtRiskDesc.setText(
-                securityDescription + privacyExposureText
+        // ---------------------------------------------------------
+        // Privacy Exposure
+        // Based on currently granted sensitive permissions.
+        // ---------------------------------------------------------
+
+        txtPrivacyLevel.setText(
+                appInfo.getPrivacyExposureLevel().toUpperCase()
         );
 
-        txtRiskLevel.setTextColor(riskColor);
-        cardResult.setCardBackgroundColor(riskBg);
+        txtPrivacyScore.setText(
+                appInfo.getPrivacyExposureScore() + " points"
+        );
 
         // ---------------------------------------------------------
-        // Sensitive Categories
+        // Security Posture
         // ---------------------------------------------------------
 
-        layoutCategories.removeAllViews();
+        txtTargetSdk.setText(
+                String.valueOf(appInfo.getTargetSdkVersion())
+        );
 
-        if (appInfo.getSensitiveCategories() != null) {
+        txtDebuggable.setText(
+                appInfo.isDebuggable() ? "Yes" : "No"
+        );
 
-            for (String category : appInfo.getSensitiveCategories()) {
+        // ---------------------------------------------------------
+        // Sensitive Category Chips
+        // ---------------------------------------------------------
+
+        sensitiveCategoriesLayout.removeAllViews();
+
+        List<String> sensitiveCategories =
+                appInfo.getSensitiveCategories();
+
+        if (sensitiveCategories != null) {
+
+            for (String category : sensitiveCategories) {
                 addCategoryCard(
-                        layoutCategories,
+                        sensitiveCategoriesLayout,
                         category
                 );
             }
@@ -181,12 +250,14 @@ public class AppDetailsActivity extends AppCompatActivity {
 
         StringBuilder reasonsText = new StringBuilder();
 
-        if (appInfo.getRiskReasons() != null) {
+        List<String> riskReasons = appInfo.getRiskReasons();
 
-            for (String reason : appInfo.getRiskReasons()) {
+        if (riskReasons != null) {
+
+            for (String reason : riskReasons) {
 
                 reasonsText
-                        .append("• ")
+                        .append("\u2022 ")
                         .append(reason)
                         .append("\n");
             }
@@ -194,22 +265,19 @@ public class AppDetailsActivity extends AppCompatActivity {
 
         txtReasons.setText(
                 reasonsText.length() > 0
-                        ? reasonsText.toString()
+                        ? reasonsText.toString().trim()
                         : "No specific risks identified."
         );
 
-        // ---------------------------------------------------------
-// Sensitive Permissions: Requested vs Granted
+
+// ---------------------------------------------------------
+// Permission Details: Compact by default, expandable
 // ---------------------------------------------------------
 
-        List<String> requestedPermissions =
-                appInfo.getPermissions();
+        List<String> requestedPermissions = appInfo.getPermissions();
+        List<String> grantedPermissions = appInfo.getGrantedPermissions();
 
-        List<String> grantedPermissions =
-                appInfo.getGrantedPermissions();
-
-        PermissionAnalyzer permissionAnalyzer =
-                new PermissionAnalyzer();
+        PermissionAnalyzer permissionAnalyzer = new PermissionAnalyzer();
 
         List<String> requestedSensitiveCategories =
                 appInfo.getSensitiveCategories();
@@ -219,74 +287,47 @@ public class AppDetailsActivity extends AppCompatActivity {
                         grantedPermissions
                 );
 
-        StringBuilder permissionsText =
-                new StringBuilder();
+// Build the compact sensitive-permission summary.
+        StringBuilder summaryText = new StringBuilder();
 
-        int requestedSensitiveCount =
-                requestedSensitiveCategories != null
-                        ? requestedSensitiveCategories.size()
-                        : 0;
+        int requestedCount = requestedSensitiveCategories != null
+                ? requestedSensitiveCategories.size() : 0;
 
-        int grantedSensitiveCount =
-                grantedSensitiveCategories != null
-                        ? grantedSensitiveCategories.size()
-                        : 0;
+        int grantedCount = grantedSensitiveCategories != null
+                ? grantedSensitiveCategories.size() : 0;
 
-        permissionsText.append("Sensitive permissions\n\n");
-
-        permissionsText
-                .append("Requested: ")
-                .append(requestedSensitiveCount)
-                .append("\n");
-
-        permissionsText
-                .append("Granted: ")
-                .append(grantedSensitiveCount)
-                .append("\n\n");
+        summaryText.append("Sensitive permissions\n")
+                .append("Requested: ").append(requestedCount).append("\n")
+                .append("Granted: ").append(grantedCount).append("\n\n");
 
         if (requestedSensitiveCategories == null
                 || requestedSensitiveCategories.isEmpty()) {
 
-            permissionsText.append(
-                    "No sensitive permissions detected."
-            );
+            summaryText.append("No sensitive permissions detected.");
 
         } else {
 
             for (String category : requestedSensitiveCategories) {
 
-                boolean isGranted =
-                        grantedSensitiveCategories != null
-                                && grantedSensitiveCategories.contains(category);
+                boolean isGranted = grantedSensitiveCategories != null
+                        && grantedSensitiveCategories.contains(category);
 
-                permissionsText
-                        .append("• ")
+                summaryText.append("\u2022 ")
                         .append(category)
-                        .append(" — ");
-
-                if (isGranted) {
-                    permissionsText.append("Granted");
-                } else {
-                    permissionsText.append("Not Granted");
-                }
-
-                permissionsText.append("\n");
+                        .append(" \u2014 ")
+                        .append(isGranted ? "Granted" : "Not granted")
+                        .append("\n");
             }
         }
 
-// ---------------------------------------------------------
-// Full Android Permission List
-// ---------------------------------------------------------
+// Build the complete list separately.
+        StringBuilder fullText = new StringBuilder(summaryText);
 
-        permissionsText.append("\n");
-        permissionsText.append("All requested permissions\n\n");
+        fullText.append("\nAll requested permissions\n\n");
 
-        if (requestedPermissions == null
-                || requestedPermissions.isEmpty()) {
+        if (requestedPermissions == null || requestedPermissions.isEmpty()) {
 
-            permissionsText.append(
-                    "No permissions requested."
-            );
+            fullText.append("No permissions requested.");
 
         } else {
 
@@ -294,41 +335,44 @@ public class AppDetailsActivity extends AppCompatActivity {
 
                 String permissionName = permission;
 
-                if (permissionName.startsWith(
-                        "android.permission."
-                )) {
+                String prefix = "android.permission.";
 
-                    permissionName =
-                            permissionName.substring(
-                                    "android.permission.".length()
-                            );
+                if (permissionName.startsWith(prefix)) {
+                    permissionName = permissionName.substring(prefix.length());
                 }
 
-                permissionName =
-                        permissionName.replace("_", " ");
+                permissionName = permissionName.replace("_", " ");
 
-                boolean isGranted =
-                        grantedPermissions != null
-                                && grantedPermissions.contains(permission);
+                boolean isGranted = grantedPermissions != null
+                        && grantedPermissions.contains(permission);
 
-                permissionsText
-                        .append("• ")
+                fullText.append("\u2022 ")
                         .append(permissionName)
-                        .append(" — ");
-
-                if (isGranted) {
-                    permissionsText.append("Granted");
-                } else {
-                    permissionsText.append("Not Granted");
-                }
-
-                permissionsText.append("\n");
+                        .append(" \u2014 ")
+                        .append(isGranted ? "Granted" : "Not granted")
+                        .append("\n");
             }
         }
 
-        txtPermissions.setText(
-                permissionsText.toString()
-        );
+// Show only the summary when the screen opens.
+        txtPermissions.setText(summaryText.toString().trim());
+        btnTogglePermissions.setText("Show all");
+
+        final boolean[] showingAllPermissions = {false};
+
+        btnTogglePermissions.setOnClickListener(v -> {
+
+            showingAllPermissions[0] = !showingAllPermissions[0];
+
+            if (showingAllPermissions[0]) {
+                txtPermissions.setText(fullText.toString().trim());
+                btnTogglePermissions.setText("Show less");
+            } else {
+                txtPermissions.setText(summaryText.toString().trim());
+                btnTogglePermissions.setText("Show all");
+            }
+        });
+
 
         // ---------------------------------------------------------
         // Open Android App Settings
@@ -341,30 +385,34 @@ public class AppDetailsActivity extends AppCompatActivity {
         );
     }
 
+    // -------------------------------------------------------------
+    // Add a category chip to the FlexboxLayout.
+    // -------------------------------------------------------------
+
     private void addCategoryCard(
-            LinearLayout parent,
+            FlexboxLayout layout,
             String category
     ) {
 
         View view = getLayoutInflater().inflate(
                 R.layout.item_category_badge,
-                parent,
+                layout,
                 false
         );
 
-        TextView txt =
-                view.findViewById(
-                        R.id.txt_category_name
-                );
+        TextView txtCategory =
+                view.findViewById(R.id.txt_category_name);
 
-        txt.setText(category);
+        txtCategory.setText(category);
 
-        parent.addView(view);
+        layout.addView(view);
     }
 
-    private void openAppSettings(
-            String packageName
-    ) {
+    // -------------------------------------------------------------
+    // Open the selected app's Android settings page.
+    // -------------------------------------------------------------
+
+    private void openAppSettings(String packageName) {
 
         try {
 
