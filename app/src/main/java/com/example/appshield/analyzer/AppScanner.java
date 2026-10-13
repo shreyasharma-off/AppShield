@@ -97,6 +97,7 @@ public class AppScanner {
                     );
                 }
 
+                // Get all permissions requested by the app.
                 List<String> permissions;
 
                 if (packageInfo.requestedPermissions != null) {
@@ -110,11 +111,51 @@ public class AppScanner {
                     permissions = new ArrayList<>();
                 }
 
+                // Check which of the requested permissions are currently granted.
+                List<String> grantedPermissions = new ArrayList<>();
+
+                for (String permission : permissions) {
+
+                    if (packageManager.checkPermission(
+                            permission,
+                            packageName
+                    ) == PackageManager.PERMISSION_GRANTED) {
+
+                        grantedPermissions.add(permission);
+                    }
+                }
+
+                // Calculate privacy exposure from currently granted sensitive permissions.
+                List<String> grantedSensitiveCategories =
+                        permissionAnalyzer.getGrantedSensitiveCategories(
+                                grantedPermissions
+                        );
+
+                int privacyExposureScore =
+                        riskEngine.calculateScore(
+                                grantedSensitiveCategories
+                        );
+
+                String privacyExposureLevel =
+                        riskEngine.getRiskLevel(
+                                privacyExposureScore
+                        );
+
+                // Security posture signals.
+                int targetSdkVersion =
+                        applicationInfo.targetSdkVersion;
+
+                boolean debuggable =
+                        (applicationInfo.flags
+                                & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
+
+                // Map requested permissions to AppShield's sensitive categories.
                 List<String> sensitiveCategories =
                         permissionAnalyzer.getSensitiveCategories(
                                 permissions
                         );
 
+                // Calculate risk score from requested permissions.
                 int riskScore =
                         riskEngine.calculateScore(
                                 sensitiveCategories
@@ -133,10 +174,15 @@ public class AppScanner {
                         packageName,
                         appIcon,
                         permissions,
+                        grantedPermissions,
                         sensitiveCategories,
                         riskScore,
                         riskLevel,
-                        riskReasons
+                        riskReasons,
+                        privacyExposureScore,
+                        privacyExposureLevel,
+                        targetSdkVersion,
+                        debuggable
                 );
 
                 scannedApps.add(appInfo);

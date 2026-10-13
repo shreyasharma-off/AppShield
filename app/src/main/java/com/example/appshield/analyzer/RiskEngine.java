@@ -1,90 +1,67 @@
+
 package com.example.appshield.analyzer;
 
 import com.example.appshield.utils.RiskConstants;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 public class RiskEngine {
 
     public int calculateScore(List<String> categories) {
+        if (categories == null || categories.isEmpty()) {
+            return 0;
+        }
 
         int score = 0;
+        Set<String> uniqueCategories = new HashSet<>(categories);
 
-        for (String category : categories) {
-
-            switch (category) {
-
-                case RiskConstants.CAMERA:
-                    score += RiskConstants.CAMERA_POINTS;
-                    break;
-
-                case RiskConstants.STORAGE_MEDIA:
-                    score += RiskConstants.STORAGE_MEDIA_POINTS;
-                    break;
-
-                case RiskConstants.NOTIFICATIONS:
-                    score += RiskConstants.NOTIFICATIONS_POINTS;
-                    break;
-
-                case RiskConstants.LOCATION:
-                    score += RiskConstants.LOCATION_POINTS;
-                    break;
-
-                case RiskConstants.CONTACTS:
-                    score += RiskConstants.CONTACTS_POINTS;
-                    break;
-
-                case RiskConstants.MICROPHONE:
-                    score += RiskConstants.MICROPHONE_POINTS;
-                    break;
-
-                case RiskConstants.SMS:
-                    score += RiskConstants.SMS_POINTS;
-                    break;
-
-                case RiskConstants.PHONE:
-                    score += RiskConstants.PHONE_POINTS;
-                    break;
-            }
+        for (String category : uniqueCategories) {
+            score += getPointsForCategory(category);
         }
 
         return score;
     }
 
     public String getRiskLevel(int score) {
-
         if (score <= 3) {
             return RiskConstants.LOW;
-        }
-
-        else if (score <= 7) {
+        } else if (score <= 7) {
             return RiskConstants.MEDIUM;
-        }
-
-        else {
+        } else {
             return RiskConstants.HIGH;
         }
     }
 
     public List<String> getRiskReasons(List<String> categories) {
-
         List<String> reasons = new ArrayList<>();
 
-        for (String category : categories) {
+        if (categories == null || categories.isEmpty()) {
+            return reasons;
+        }
 
+        Set<String> uniqueCategories = new LinkedHashSet<>(categories);
+
+        for (String category : uniqueCategories) {
             int points = getPointsForCategory(category);
 
-            reasons.add(category + " (+" + points + ")");
+            if (points > 0) {
+                reasons.add(category + " (+" + points + ")");
+            }
         }
 
         return reasons;
     }
 
     private int getPointsForCategory(String category) {
+        if (category == null) {
+            return 0;
+        }
 
         switch (category) {
-
             case RiskConstants.CAMERA:
                 return RiskConstants.CAMERA_POINTS;
 
